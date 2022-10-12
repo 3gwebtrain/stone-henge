@@ -1,0 +1,28 @@
+{
+  "root": "apps/stonehenge-e2e",
+  "sourceRoot": "apps/stonehenge-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/stonehenge-e2e/cypress.json",
+        "devServerTarget": "stonehenge:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "stonehenge:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/stonehenge-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["stonehenge"]
+}

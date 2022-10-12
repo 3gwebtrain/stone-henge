@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "projects": {
+    "api": "apps/api",
+    "api-interfaces": "libs/api-interfaces",
+    "stonehenge": "apps/stonehenge",
+    "stonehenge-e2e": "apps/stonehenge-e2e"
+  }
+}
