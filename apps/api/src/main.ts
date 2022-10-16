@@ -1,16 +1,25 @@
+import * as cookieParser from 'cookie-parser';
+import * as cors from 'cors';
 import * as express from 'express';
-import { Message } from '@stonehenge-props/api-interfaces';
+import * as mongoose from 'mongoose';
+import userRouter from './app/routes/users-routes';
+import { environment } from './environments/environment';
 
 const app = express();
-
-const greeting: Message = { message: 'Welcome to api!' };
-
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
+app.use(cors());
+app.use(cookieParser());
+app.use(express.json());
+app.use('/api', userRouter);
 
 const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
-});
-server.on('error', console.error);
+
+mongoose
+  .connect(environment.BASE_URL)
+  .then(() => {
+    console.log('Mongo DB connected');
+    const server = app.listen(port, () => {
+      console.log('Listening at http://localhost:' + port + '/api');
+    });
+    server.on('error', console.error);
+  })
+  .catch((err) => console.log(err));

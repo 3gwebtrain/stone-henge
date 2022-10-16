@@ -1,28 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@stonehenge-props/api-interfaces';
+import { ModuleProps } from '@stonehenge-props/api-interfaces';
+import { FC } from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import appStore from './modules/app-store/app-store';
+import allModules from './modules/Moduls';
 
-export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
-
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
-
+export const App: FC = () => {
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to stonehenge!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Fast and Extensible Build System"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
+    <Provider store={appStore}>
+      <BrowserRouter>
+        <Routes>
+          {allModules.map((m: ModuleProps) => {
+            return <Route {...m.routeProps} key={m.name} />;
+          })}
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 };
-
-export default App;

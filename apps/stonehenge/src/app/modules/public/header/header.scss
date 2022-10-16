@@ -1,0 +1,26 @@
+nav {
+  background: #fff;
+  font-size: 1.8rem;
+  line-height: 2rem;
+  align-items: center;
+  .site-logo {
+    img {
+      max-height: 6rem;
+    }
+  }
+  ul {
+    display: flex;
+    gap: 0 4.5rem;
+    justify-content: flex-end;
+    a {
+      color: #1d294a;
+    }
+  }
+  button.ant-btn.ant-btn-primary {
+    color: #fff;
+    background-color: #1d294a;
+    border: 0;
+    padding: 0 4rem;
+    margin-left: auto;
+  }
+}

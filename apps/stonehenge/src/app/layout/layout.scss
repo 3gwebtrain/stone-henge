@@ -1,0 +1,26 @@
+section.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  & > section:nth-child(1),
+  & > section:nth-child(3) {
+    background-color: #fff;
+  }
+  & > section:nth-child(2) {
+    flex: 1;
+  }
+  & > section {
+    & > nav,
+    main,
+    footer {
+      max-width: 117rem;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 1rem;
+    }
+    main {
+      height: 100%;
+    }
+  }
+}
+
