@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
   BASE_URL:
-    'mongodb+srv://3gwebtrain:Chennai%403@cluster0.nupdayu.mongodb.net/stonehenge',
+    'mongodb+srv://admin:iSIJzIlclZ1x1HY5@cluster0.ayogx5o.mongodb.net/stonehenge?retryWrites=true&w=majority',
   secretkey: 'Madukkarai',
 };

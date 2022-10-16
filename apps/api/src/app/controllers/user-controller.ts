@@ -41,12 +41,16 @@ export const userSignUp: RequestHandler = async (
     console.log(error);
   }
 
-  return res.status(200).json({ message: user });
+  return res.json({ message: user });
 };
 
-export const userLogin = async (req: Request, res: Response) => {
+export const userLogin: RequestHandler = async (
+  req: Request,
+  res: Response
+) => {
   const { email, password } = req.body;
   let existingUser;
+
   try {
     existingUser = await userModel.findOne({ email: email });
   } catch (error) {
@@ -56,20 +60,23 @@ export const userLogin = async (req: Request, res: Response) => {
   if (!existingUser) {
     return res.status(400).json({ message: 'User not found, Sign up please' });
   }
+
   const veryfyPassword = await bcrypt.compareSync(
     password,
     existingUser.password
   );
+
   if (!veryfyPassword) {
     return res.status(400).json({ message: 'Invalid Email / Password ' });
   }
+
   const webToken = jwt.sign({ id: existingUser.id }, environment.secretkey, {
     expiresIn: '1d',
   });
 
   res.cookie('user_token', webToken);
 
-  return res.sendStatus(200).json({
+  return res.json({
     message: 'Successfully Logged In',
     user: existingUser,
   });
@@ -81,22 +88,22 @@ export const verifyToken = (
   next: NextFunction
 ) => {
   const newCookie = req.cookies;
-
-  console.log('token', newCookie);
-  // if (!token) {
-  //   res.status(400).json({ message: 'No token found' });
-  // }
-  // jwt.verify(
-  //   String(token),
-  //   environment.secretkey,
-  //   (err, user: { id: string }) => {
-  //     if (err) {
-  //       return res.status(400).json({ message: 'Invalid token' });
-  //     }
-  //     req.id = user.id;
-  //   }
-  // );
-  // next();
+  const token = newCookie.user_token;
+  console.log('token', newCookie.user_token);
+  if (!token) {
+    res.status(400).json({ message: 'No token found' });
+  }
+  jwt.verify(
+    String(token),
+    environment.secretkey,
+    (err, user: { id: string }) => {
+      if (err) {
+        return res.status(400).json({ message: 'Invalid token' });
+      }
+      req.id = user.id;
+    }
+  );
+  next();
 };
 
 export const getUser = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -113,5 +120,5 @@ export const getUser = async (req: IGetUserAuthInfoRequest, res: Response) => {
     return res.status(400).json({ message: 'User not found' });
   }
 
-  return res.status(200).json({ user });
+  return res.json({ user });
 };

@@ -6,5 +6,5 @@ const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlenght: 6 },
 });
-
-export default mongoose.model('User', userSchema);
+const UserModel = mongoose.model('User', userSchema);
+export default UserModel;
