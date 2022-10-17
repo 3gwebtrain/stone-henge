@@ -70,15 +70,21 @@ export const userLogin: RequestHandler = async (
     return res.status(400).json({ message: 'Invalid Email / Password ' });
   }
 
-  const webToken = jwt.sign({ id: existingUser.id }, environment.secretkey, {
-    expiresIn: '1d',
+  const webToken = jwt.sign({ id: existingUser._id }, environment.secretkey, {
+    expiresIn: '30s',
   });
 
-  res.cookie('user_token', webToken);
+  res.cookie(String(existingUser._id), webToken, {
+    path: '/',
+    expires: new Date(Date.now() + 1000 * 3),
+    httpOnly: true,
+    sameSite: 'lax',
+  });
 
   return res.json({
     message: 'Successfully Logged In',
     user: existingUser,
+    token: webToken,
   });
 };
 
@@ -87,16 +93,15 @@ export const verifyToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const newCookie = req.cookies;
-  const token = newCookie.user_token;
-  console.log('token', newCookie.user_token);
+  const token = String(req.headers.cookie).split('=')[1];
+
   if (!token) {
     res.status(400).json({ message: 'No token found' });
   }
   jwt.verify(
     String(token),
     environment.secretkey,
-    (err, user: { id: string }) => {
+    (err, user: { id: string; name: string; email: string }) => {
       if (err) {
         return res.status(400).json({ message: 'Invalid token' });
       }
@@ -119,6 +124,5 @@ export const getUser = async (req: IGetUserAuthInfoRequest, res: Response) => {
   if (!user) {
     return res.status(400).json({ message: 'User not found' });
   }
-
   return res.json({ user });
 };

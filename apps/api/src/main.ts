@@ -6,7 +6,7 @@ import userRouter from './app/routes/users-routes';
 import { environment } from './environments/environment';
 
 const app = express();
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:4200' }));
 app.use(cookieParser());
 app.use(express.json());
 app.use('/api', userRouter);
